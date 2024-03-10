@@ -38,6 +38,7 @@ mongoose
 
 
 app.use(bodyParser.json());
+console.log("aditi");
 app.use('/graphql', expressGraphQL({
   schema,
   graphiql: true

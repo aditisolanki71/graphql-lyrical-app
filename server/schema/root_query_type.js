@@ -5,13 +5,14 @@ const SongType = require('./song_type');
 const LyricType = require('./lyric_type');
 const Lyric = mongoose.model('lyric');
 const Song = mongoose.model('song');
-
+console.log("inside rootquery")
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: () => ({
     songs: {
       type: new GraphQLList(SongType),
       resolve() {
+        console.log("***resolve fun***",Song.find({}))
         return Song.find({});
       }
     },
@@ -31,5 +32,6 @@ const RootQuery = new GraphQLObjectType({
     }
   })
 });
-
+console.log("songs",RootQuery.songs);
+   
 module.exports = RootQuery;

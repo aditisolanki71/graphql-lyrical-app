@@ -17,5 +17,5 @@ const SongType = new GraphQLObjectType({
     }
   })
 });
-
+console.log("song type",SongType);;
 module.exports = SongType;

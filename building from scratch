@@ -1,0 +1,22 @@
+Authentication with GraphQL
+
+welcome page
+Login page
+ihgnup page
+welcome after login
+
+multiple page -- >react route
+need to store userr data --> mongo db
+user wants to see all info of other user
+validate inputs
+authentication:- PassportJS(node library for authentication)
+passport +graphql work together?
+
+web page
+webpack -- GraphQL
+    Expres(web server)
+    MongoDB
+
+
+
+https://github.com/StephenGrider/auth-graphql-starter

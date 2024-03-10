@@ -1,0 +1,551 @@
+https://cloud.mongodb.com/v2/61ffc31379da7f1d3b32219f#/security/network/accessList
+Add IP
+
+https://cloud.mongodb.com/v2/61ffc31379da7f1d3b32219f#/clusters
+click on connect
+click on compass
+copy URL:-mongodb+srv://aditi:<password>@cluster0.v364j.mongodb.net/
+
+
+
+open mongo compass
+click on new connection
+add this URL:-
+mongodb+srv://aditi:NruNqUTV1OPMxTvN@cluster0.v364j.mongodb.net/
+connect
+
+
+>npm run dev
+
+http://localhost:4000/graphql
+
+
+1)addSong
+mutation {
+  addSong(title:"Blank space234"){
+    id
+  }
+}
+
+
+{
+  "data": {
+    "addSong": {
+      "id": "65d1b59b1aa7269697b172ea"
+    }
+  }
+}
+
+
+
+2)addLyricToSong:-
+mutation {
+  addLyricToSong(songId:"65d1b59b1aa7269697b172ea", content: "demo"){
+    id
+  }
+}
+
+{
+  "data": {
+    "addLyricToSong": {
+      "id": "65d1b59b1aa7269697b172ea"
+    }
+  }
+}
+
+3){
+  songs {
+    id,
+    title,
+    lyrics {
+      id
+    }
+  }
+}
+
+{
+  "data": {
+    "songs": [
+      {
+        "id": "62b8376583aa24d52f7c9026",
+        "title": "shape of you",
+        "lyrics": [
+          {
+            "id": "62b8379583aa24d52f7c9029"
+          }
+        ]
+      },
+      {
+        "id": "62bd86bc5dc6e293eb32e981",
+        "title": "shape of you2",
+        "lyrics": []
+      },
+      {
+        "id": "62bd8d215dc6e293eb32e983",
+        "title": "shape of you2",
+        "lyrics": []
+      },
+      {
+        "id": "62b8869d7d3755df4b621a5a",
+        "title": "Blank space",
+        "lyrics": []
+      },
+      {
+        "id": "62bd8ed95dc6e293eb32e985",
+        "title": "shape of you3",
+        "lyrics": []
+      },
+      {
+        "id": "65d1b5881aa7269697b172e8",
+        "title": "Blank space",
+        "lyrics": []
+      },
+      {
+        "id": "65d1b59b1aa7269697b172ea",
+        "title": "Blank space234",
+        "lyrics": [
+          {
+            "id": "65d1c8ca1aa7269697b172ed"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+>http://localhost:4000/
+
+3)get all songs in graphiql tool :- 
+{
+    songs {
+        title
+    }
+}
+
+
+{
+    "data": {
+        "songs": [
+            {
+                "title": "HEY"
+            }
+        ]
+    }
+}
+
+
+2)write query:-
+import gql from "graphql-tag";
+//gql is only defining query,not executing query
+const query = gql`
+   query songs {
+      songs {
+         id,
+         title
+      }
+   }`;
+
+
+4)bind query in comonent
+
+import { graphql } from "react-apollo";
+export default graphql(query)(SongsList);
+
+
+
+*)localhost:4000/graphql
+
+  mutation {
+    addSong(title: "chaleyaa teri ore"){
+    title
+    }
+  }
+
+  {
+  "data": {
+    "addSong": {
+      "title": "chaleyaa teri ore"
+    }
+  }
+}
+
+*)query params:-
+mutation AddSong($title: String) {
+    addSong(title: $title){
+        id,
+        title
+    }
+  }
+
+Query Variables:-
+  {
+  "title": "Maahi maahi"
+}
+
+output:-
+{
+  "data": {
+    "addSong": {
+      "id": "65d20bcef1171771f0ad1e83",
+      "title": "Maahi maahi"
+    }
+  }
+}
+
+
+*)Defining query variables in React:-
+
+mutation deleteSong($id: ID){
+  deleteSong(id: $id) {
+    id
+  }
+}
+
+output--
+{
+  "data": {
+    "deleteSong": {
+      "id": null
+    }
+  }
+}
+
+
+
+
+------------------------------
+section -9 ----------------------------
+Automatic Data Caching
+-----------------------------
+*)Refetching query
+
+
+refetch()
+it automatically execute query assocaited with that particular page
+
+  onSongDelete(id) {
+      console.log('inside on song delete', this.props)
+      this.props.mutate({ variables: { id }})
+      .then(() => this.props.data.refetch())
+   }
+
+if u have ore than 2 query both will execute
+
+
+refetchQuery() {}
+  handleSubmit(event) {
+      event.preventDefault();
+      console.log("props",this.props)
+      this.props.mutate({
+         variables: {
+            title: this.state.title
+         },
+         refetchQueries: [{ query: query }]
+      })
+      .then(() => hashHistory.push("/"))
+   }
+
+   songcreate
+   we want to update get query which is not associated with song create so we need to use refetchQuery here
+
+
+   *)Quick CSS Breather:-
+
+
+   *)song detail:-
+   # mutation AddSong($title:String) {
+  
+# }
+
+*)query:-
+query SongQuery($id: ID!) {
+  song(id:$id){
+    id,
+    title
+  }
+}
+
+query variable:-
+{
+  "id": "65d211c5f1171771f0ad1e95"
+}
+
+output:-
+
+{
+  "data": {
+    "song": {
+      "id": "65d211c5f1171771f0ad1e95",
+      "title": "abcd"
+    }
+  }
+}
+
+
+*)Add lyrics mutation:-
+mutation AddLyricToSong($content:String, $songId:ID) {
+  addLyricToSong(content: $content, songId: $songId) {
+    id,
+    lyrics {
+      content
+    }
+  }
+}
+
+quer variables:-
+{
+  "songId": "65d215fff1171771f0ad1ebb",
+  "content":"Dil rohi aaye aahi tu aaja mere mahi"
+}
+
+
+output:-
+{
+  "data": {
+    "addLyricToSong": {
+      "id": "65d215fff1171771f0ad1ebb",
+      "lyrics": [
+        {
+          "content": "Dil rohi aaye aahi tu aaja mere mahi"
+        }
+      ]
+    }
+  }
+}
+
+
+
+*)fetch lyrics query:-
+query SongQuery($id: ID!) {
+    song(id:$id){
+      id,
+      title,
+    lyrics {
+      id,
+      content
+    }
+    
+    }
+}
+
+query variables:-
+{
+  "id": "65d215fff1171771f0ad1ebb"
+}
+
+
+output:-
+{
+  "data": {
+    "song": {
+      "id": "65d215fff1171771f0ad1ebb",
+      "title": "Maahi maahi",
+      "lyrics": [
+        {
+          "id": "65d237fff1171771f0ad1f20",
+          "content": "Dil rohi aaye aahi tu aaja mere mahi"
+        }
+      ]
+    }
+  }
+}
+
+
+
+https://www.apollographql.com/docs/react/caching/cache-configuration/
+  
+
+
+1)Fetch list of lyrics
+2)Create a new lyric
+3)Refetch entire song + lyrics
+4)Apollo sees song 5 updated
+5)Apollo rerenders components
+
+*)More on client side mutations:-
+likelyrics
+
+*)mutation:-
+{
+  songs {
+    lyrics {
+      id
+      content
+    }
+  }
+}
+
+
+*)output:-
+{
+  "data": {
+    "songs": [
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": [
+          {
+            "id": "65d9f3137e0a2bd8871b804d",
+            "content": "abcd"
+          }
+        ]
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": []
+      },
+      {
+        "lyrics": [
+          {
+            "id": "65d237fff1171771f0ad1f20",
+            "content": "Dil rohi aaye aahi tu aaja mere mahi"
+          },
+          {
+            "id": "65d24853f1171771f0ad1f9a",
+            "content": "Dil rohi aaye aahi tu aaja mere mahi"
+          },
+          {
+            "id": "65d24888f1171771f0ad1fa3",
+            "content": "hello"
+          },
+          {
+            "id": "65d248d3f1171771f0ad1fb0",
+            "content": "hey"
+          },
+          {
+            "id": "65d9f8ab7e0a2bd8871b807c",
+            "content": "Dil rohi aaye aahi tu aaja mere mahi"
+          }
+        ]
+      },
+      {
+        "lyrics": [
+          {
+            "id": "65d9f36e7e0a2bd8871b8058",
+            "content": "abcd"
+          },
+          {
+            "id": "65d9f3bd7e0a2bd8871b8063",
+            "content": "des1"
+          },
+          {
+            "id": "65d9f58e7e0a2bd8871b806d",
+            "content": "desc2"
+          },
+          {
+            "id": "65d9f5b77e0a2bd8871b8076",
+            "content": "desc3"
+          },
+          {
+            "id": "65e2eebab34e56bdae2214e2",
+            "content": "desc4"
+          },
+          {
+            "id": "65e2eebeb34e56bdae2214e8",
+            "content": "desc5"
+          },
+          {
+            "id": "65e2ef75b34e56bdae2214f1",
+            "content": "des6"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+
+*)mutation likelyrics:-
+mutation LikeLyric($id:ID) {
+  likeLyric(id:$id) {
+    id
+    likes
+  }
+}
+
+*)query variables:-
+{
+	"id": "65e2eebeb34e56bdae2214e8"
+}
+
+
+*)ouput:-
+{
+  "data": {
+    "likeLyric": {
+      "id": "65e2eebeb34e56bdae2214e8",
+      "likes": 1
+    }
+  }
+}
+
+
+call mutation
+guess at response
+UI updates
+    :
+    :
+    :
+response comes back
+UI updates
+
+*)Handling optimistic response:-
+
+ onSongLike(id, likes) {
+      console.log('inside song like', id)
+      this.props.mutate({ 
+         variables: { id },
+         optimisticResponse: {
+            __typename: 'Mutation',
+            likeLyric: {
+               id: id,
+               __typename: 'LyricType',
+               likes: likes + 1
+            }
+         }
+      });
+      // .then(() => this.props.data.refetch())
+   }
+
+
+   *)App wrapup
+
+   individual query
+   fetch data
+   dataIDfromobject
+   usemutation
+   optimistic update
